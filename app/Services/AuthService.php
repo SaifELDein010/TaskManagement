@@ -33,7 +33,7 @@ class AuthService
         $role = $this->roleRepository->findByName($roleName);
 
         if (!$role) {
-            throw new \RuntimeException('Role not found.');
+            throw new \RuntimeException('Role not found');
         }
 
         $user = $this->userRepository->create([
@@ -67,5 +67,26 @@ class AuthService
 
     public function logout(): void {
         $this->jwt->invalidate();
+    }
+
+    public function me(): array {
+        $user = $this->jwt->user();
+
+        return $this->userResponse($user);
+    }
+
+    public function updatePassword(array $data): array {
+        $user = $this->jwt->user();
+
+        if (!Hash::check($data['current_password'],$user->hash_password)) {
+            throw new \RuntimeException('Invalid credentials');
+        }
+
+        $user = $this->userRepository->updatePassword(
+            $user,
+            Hash::make($data['new_password'])
+        );
+
+        return $this->userResponse($user);
     }
 }

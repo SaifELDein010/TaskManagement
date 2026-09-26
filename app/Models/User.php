@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements JWTSubject {
+
+    use Notifiable;
+    use HasRoles;
     protected $fillable = [
-        'role_id',
         'username',
         'email',
         'password',
@@ -23,9 +27,7 @@ class User extends Authenticatable implements JWTSubject {
         ];
     }
 
-    public function role() {
-        return $this->belongsTo(Role::class);
-    }
+    protected $guard_name = 'api';
 
     public function getJWTIdentifier() {
         return $this->getKey();
@@ -35,3 +37,4 @@ class User extends Authenticatable implements JWTSubject {
         return [];
     }
 }
+

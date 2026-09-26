@@ -3,17 +3,15 @@
 namespace App\Services;
 
 use App\Repositories\User\UserRepositoryInterface;
-use App\Repositories\Role\RoleRepositoryInterface;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWT;
+use Spatie\Permission\Models\Role;
 
 class AuthService
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
-        private RoleRepositoryInterface $roleRepository,
         private JWT $jwt
     ) {
     }
@@ -23,25 +21,28 @@ class AuthService
             'id' => $user->id,
             'username' => $user->username,
             'email' => $user->email,
-            'role_id' => $user->role_id,
+            'roles' => $user->getRoleNames()->values(),
         ];
     }
 
-    public function register(array $data) {
-        $roleName = $data['role'] ?? 'Super Admin';
-
-        $role = $this->roleRepository->findByName($roleName);
-
-        if (!$role) {
-            throw new \RuntimeException('Role not found');
-        }
-
+    public function register(array $data): array {
         $user = $this->userRepository->create([
             'username' => $data['username'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role_id' => $role->id,
+            'hash_password' => Hash::make($data['password']),
         ]);
+
+        $roleName = $data['role'] ?? 'Super Admin';
+
+        $role = Role::where('name', $roleName)
+            ->where('guard_name', 'api')
+            ->first();
+
+        if (!$role) {
+            throw new \RuntimeException('Role not found.');
+        }
+
+        $user->assignRole($role);
 
         return $this->userResponse($user);
     }

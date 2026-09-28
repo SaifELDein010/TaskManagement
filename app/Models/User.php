@@ -25,8 +25,7 @@ class User extends Authenticatable implements JWTSubject {
         ];
     }
 
-    protected $guard_name = 'api'; // what this meaning, and usage?
-
+    protected $guard_name = 'api';
     public function getJWTIdentifier() {
         return $this->getKey();
     }

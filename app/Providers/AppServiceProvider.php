@@ -2,27 +2,34 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
-use App\Repositories\Role\RoleRepository;
-use App\Repositories\Role\RoleRepositoryInterface;
+use App\Repositories\permission\PermissionRepositoryInterface;
+use App\Repositories\permission\PermissionRepository;
+use App\Repositories\role\RoleRepositoryInterface;
+use App\Repositories\role\RoleRepository;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void {
         $this->app->bind(
-            UserRepositoryInterface::class,
-            UserRepository::class
+            PermissionRepositoryInterface::class,
+            PermissionRepository::class
         );
 
         $this->app->bind(
             RoleRepositoryInterface::class,
             RoleRepository::class
         );
+
+        $this->app->bind(
+            UserRepositoryInterface::class,
+            UserRepository::class
+        );
     }
 
     public function boot(): void {
-
+        
     }
 }

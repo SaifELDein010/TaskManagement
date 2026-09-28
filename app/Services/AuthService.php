@@ -15,7 +15,7 @@ class AuthService
     ) {
     }
 
-    private function userResponse(User $user): array {
+    private function userResponse(User $user) {
         return [
             'id' => $user->id,
             'username' => $user->username,
@@ -24,20 +24,16 @@ class AuthService
     }
 
     public function register(array $data) {
-        
-        // $role = $this->roleRepository->findByName($roleName);
-        
-        // if (!$role) {
-            //     throw new \RuntimeException('Role not found');
-            // }
-            
-        $roleName = $data['role'] ?? 'Super Admin';
 
+        $roleName = $data['role'] ?? 'Super Admin';
+        
         $user = $this->userRepository->create([
             'username' => $data['username'],
             'email' => $data['email'],
-            'password' => $data['password'],
+            'password' => hash::make($data['password']),
         ]);
+
+        $user->assignRole($roleName);
 
         return $this->userResponse($user);
     }
@@ -66,7 +62,7 @@ class AuthService
     }
 
     public function me(): array {
-        $user = $this->jwt->parseToken()->authenticate();
+        $user = $this->jwt->user();
 
         return $this->userResponse($user);
     }

@@ -12,7 +12,8 @@ class PermissionSeeder extends Seeder
     public function run(): void {
         $permissions = [
             'manage-user',
-            'manage-role'
+            'manage-role',
+            'create-task'
         ];
 
         foreach ($permissions as $permission) {

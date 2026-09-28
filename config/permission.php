@@ -7,8 +7,11 @@ use Spatie\Permission\Models\Role;
 return [
 
     'models' => [
-        'permission' => Permission::class,
-        'role' => Role::class,
+
+        'permission' => Spatie\Permission\Models\Permission::class,
+
+        'role' => Spatie\Permission\Models\Role::class,
+
     ],
 
     'table_names' => [

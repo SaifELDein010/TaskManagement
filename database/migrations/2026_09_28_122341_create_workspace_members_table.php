@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void {
         Schema::create('workspace_members', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('workspace_id')->constrained('workspaces');
-            $table->foreignId('user_id')->constrained('users');
-            $table->boolean('is_owner');
+            $table->foreignId('workspace_id')->constrained('workspaces')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->boolean('is_owner')->default(false);;
             $table->timestamps();
+
+            $table->unique(['workspace_id', 'user_id']);
         });
     }
 

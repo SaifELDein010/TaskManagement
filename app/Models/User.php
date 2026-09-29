@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable implements JWTSubject {
 
@@ -32,5 +33,9 @@ class User extends Authenticatable implements JWTSubject {
 
     public function getJWTCustomClaims() {
         return [];
+    }
+
+    public function workspaceMemberships(): HasMany {
+        return $this->hasMany(WorkspaceMember::class);
     }
 }

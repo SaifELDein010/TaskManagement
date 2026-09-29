@@ -46,4 +46,17 @@ class WorkspaceService {
         return $this->workspaceRepository->delete($user, $workspace);
     }
 
+    public function restore(User $user, int $id): ?Workspace {
+        $workspace = $this->workspaceRepository->findForRestore($id);
+
+        if (!$workspace) {
+            return null;
+        }
+
+        return $this->workspaceRepository->restore(
+            $user,
+            $workspace
+        );
+    }
+
 }

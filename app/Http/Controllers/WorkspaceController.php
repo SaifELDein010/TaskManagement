@@ -120,4 +120,24 @@ class WorkspaceController extends Controller
             'message' => 'Workspace deleted successfully.',
         ]);
     }
+
+    public function restore(int $id){
+        $user = Auth::guard('api')->user();
+
+        $workspace = $this->workspaceService->restore(
+            $user,
+            $id
+        );
+
+        if (!$workspace) {
+            return response()->json([
+                'message' => 'Workspace not found or user is not allowed to restore it.',
+            ], 404);
+        }
+
+        return response()->json([
+            'message' => 'Workspace restored successfully.',
+            'data' => $workspace,
+        ]);
+    }
 }

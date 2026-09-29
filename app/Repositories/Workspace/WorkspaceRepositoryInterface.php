@@ -11,4 +11,6 @@ interface WorkspaceRepositoryInterface {
     public function view(User $user, int $id);
     public function update(User $user, Workspace $workspace, array $data): ?Workspace;
     public function delete(User $user, workspace $workspace);
+    public function findForRestore(int $id): ?Workspace;
+    public function restore(User $user, Workspace $workspace): ?Workspace;
 }

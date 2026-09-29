@@ -89,4 +89,21 @@ class WorkspaceRepository implements WorkspaceRepositoryInterface {
         $workspace->delete();
         return true;
     }
+
+    public function findForRestore(int $id): ?Workspace {
+        return Workspace::withTrashed()
+            ->where('id', $id)
+            ->first();
+    }
+
+    public function restore(User $user,Workspace $workspace): ?Workspace {
+        if (!$this->isOwner($user, $workspace)) {
+            return null;
+        }
+
+        $workspace->restore();
+
+        return $workspace->refresh();
+    }
+
 }

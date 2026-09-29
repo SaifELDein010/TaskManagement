@@ -64,4 +64,9 @@ Route::middleware('auth:api')->group(function () {
         [WorkspaceController::class, 'destroy']
     );
 
+    Route::post(
+        '/workspaces/{id}/restore',
+        [WorkspaceController::class, 'restore']
+    );
+
 });

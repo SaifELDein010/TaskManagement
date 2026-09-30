@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Folder;
 
 class User extends Authenticatable implements JWTSubject {
 
@@ -37,5 +38,9 @@ class User extends Authenticatable implements JWTSubject {
 
     public function workspaceMemberships(): HasMany {
         return $this->hasMany(WorkspaceMember::class);
+    }
+
+    public function createdFolders(): HasMany {
+        return $this->hasMany(Folder::class, 'created_by');
     }
 }

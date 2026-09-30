@@ -18,9 +18,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('roles/{role}/permissions', [RoleController::class, 'syncPermissions']);
 
-    Route::post('/workspaces', [WorkspaceController::class, 'store']);
 
-     Route::get(
+    Route::get(
         '/workspaces/{id}/members/{userId}',
         [WorkspaceMembersController::class, 'show']
     );
@@ -39,4 +38,35 @@ Route::middleware('auth:api')->group(function () {
         '/workspaces/{id}/members/{userId}',
         [WorkspaceMembersController::class, 'destroy']
     );
+
+    Route::post(
+        '/workspaces',
+        [WorkspaceController::class, 'store']
+    );
+
+    Route::get(
+        '/workspaces',
+        [WorkspaceController::class, 'index']
+    );
+
+    Route::get(
+        '/workspaces/{id}',
+        [WorkspaceController::class, 'show']
+    );
+
+    Route::patch(
+        '/workspaces/{id}',
+        [WorkspaceController::class, 'update']
+    );
+
+    Route::delete(
+        '/workspaces/{id}',
+        [WorkspaceController::class, 'destroy']
+    );
+
+    Route::post(
+        '/workspaces/{id}/restore',
+        [WorkspaceController::class, 'restore']
+    );
+
 });

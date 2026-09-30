@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Repositories\User\UserRepositoryInterface;
-use App\Repositories\Role\RoleRepositoryInterface;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWT;
@@ -13,35 +11,29 @@ class AuthService
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
-        private RoleRepositoryInterface $roleRepository,
         private JWT $jwt
     ) {
     }
 
-    private function userResponse(User $user): array {
+    private function userResponse(User $user) {
         return [
             'id' => $user->id,
             'username' => $user->username,
             'email' => $user->email,
-            'role_id' => $user->role_id,
         ];
     }
 
     public function register(array $data) {
+
         $roleName = $data['role'] ?? 'Super Admin';
-
-        $role = $this->roleRepository->findByName($roleName);
-
-        if (!$role) {
-            throw new \RuntimeException('Role not found.');
-        }
-
+        
         $user = $this->userRepository->create([
             'username' => $data['username'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role_id' => $role->id,
+            'password' => hash::make($data['password']),
         ]);
+
+        $user->assignRole($roleName);
 
         return $this->userResponse($user);
     }
@@ -53,7 +45,7 @@ class AuthService
             throw new \RuntimeException('Invalid credentials');
         }
 
-        if (!Hash::check($data['password'], $user->hash_password)) {
+        if (!Hash::check($data['password'], $user->password)) {
             throw new \RuntimeException('Invalid credentials');
         }
 
@@ -67,5 +59,26 @@ class AuthService
 
     public function logout(): void {
         $this->jwt->invalidate();
+    }
+
+    public function me(): array {
+        $user = $this->jwt->user();
+
+        return $this->userResponse($user);
+    }
+
+    public function updatePassword(array $data): array {
+        $user = $this->jwt->user();
+
+        if (!Hash::check($data['current_password'],$user->password)) {
+            throw new \RuntimeException('Invalid credentials');
+        }
+
+        $user = $this->userRepository->updatePassword(
+            $user,
+            Hash::make($data['new_password'])
+        );
+
+        return $this->userResponse($user);
     }
 }

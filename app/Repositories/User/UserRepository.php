@@ -12,4 +12,12 @@ class UserRepository implements UserRepositoryInterface {
     public function findByEmail(string $email): ?User {
         return User::where('email', $email)->first();
     }
+
+    public function updatePassword(User $user, string $hashedPassword): User {
+        $user->update([
+            'password' => $hashedPassword,
+        ]);
+
+        return $user;
+    }
 }

@@ -2,30 +2,31 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class RoleSeeder extends Seeder
 {
-    public function run(): void {
-        Role::updateOrCreate([
+    public function run(): void
+    {
+
+        $superAdmin = Role::firstOrCreate([
             'name' => 'Super Admin',
-            'description' => 'Has full access to the entire system',
+            'guard_name' => 'api',
         ]);
 
-        Role::updateOrCreate([
-            'name' => 'Admin',
-            'description' => 'Has full access within assigned workspaces',
+        $member = Role::firstOrCreate([
+            'name' => 'Member',
+            'guard_name' => 'api',
         ]);
 
-        Role::updateOrCreate([
-            'name' => 'Project Owner',
-            'description' => 'Has full access within assigned folders',
+        $superAdmin->givePermissionTo([
+            'manage-user',
+            'manage-role'
         ]);
 
-        Role::updateOrCreate([
-            'name' => 'Project Member',
-            'description' => 'Has access to tasks within permitted resources',
+        $member->givePermissionTo([
+            'create-task',
         ]);
     }
 }

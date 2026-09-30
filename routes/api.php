@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\WorkspaceController;
+use App\Http\Controllers\WorkspaceMembersController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -14,8 +16,27 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('roles', RoleController::class);
 
-    Route::put(
-        'roles/{role}/permissions',
-        [RoleController::class, 'syncPermissions']
+    Route::put('roles/{role}/permissions', [RoleController::class, 'syncPermissions']);
+
+    Route::post('/workspaces', [WorkspaceController::class, 'store']);
+
+     Route::get(
+        '/workspaces/{id}/members/{userId}',
+        [WorkspaceMembersController::class, 'show']
+    );
+
+    Route::post(
+        '/workspaces/{id}/members/{userId}',
+        [WorkspaceMembersController::class, 'store']
+    );
+
+    Route::patch(
+        '/workspaces/{id}/members/{userId}',
+        [WorkspaceMembersController::class, 'update']
+    );
+
+    Route::delete(
+        '/workspaces/{id}/members/{userId}',
+        [WorkspaceMembersController::class, 'destroy']
     );
 });

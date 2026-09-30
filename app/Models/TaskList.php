@@ -18,8 +18,15 @@ class TaskList extends Model
         'workspace_id',
         'folder_id',
         'created_by',
+        'workflow',
+        'task_defaults',
     ];
 
+    protected $casts = [
+        'workflow' => 'array',
+        'task_defaults' => 'array',
+    ];
+    
     public function workspace(): BelongsTo {
         return $this->belongsTo(Workspace::class);
     }

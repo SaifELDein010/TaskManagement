@@ -62,13 +62,13 @@ class AuthService
     }
 
     public function me(): array {
-        $user = $this->jwt->user();
+        $user = auth('api')->user();
 
         return $this->userResponse($user);
     }
 
     public function updatePassword(array $data): array {
-        $user = $this->jwt->user();
+        $user = auth('api')->user();
 
         if (!Hash::check($data['current_password'],$user->password)) {
             throw new \RuntimeException('Invalid credentials');

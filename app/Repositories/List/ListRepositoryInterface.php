@@ -15,4 +15,5 @@ interface ListRepositoryInterface {
     public function findFolder(int $folderId);
     public function findForRestore(int $id): ?TaskList;
     public function restore(TaskList $list);
+    public function updateWorkflow(TaskList $list, array $workflow, ?array $defaults): TaskList;
 }

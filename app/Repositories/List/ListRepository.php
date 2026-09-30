@@ -5,6 +5,7 @@ namespace App\Repositories\List;
 use App\Models\Folder;
 use App\Models\TaskList;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class ListRepository implements ListRepositoryInterface{
     public function create(array $data){
@@ -59,5 +60,18 @@ class ListRepository implements ListRepositoryInterface{
         $list->restore();
 
         return $list->refresh();
+    }
+
+    public function updateWorkflow(TaskList $list, array $workflow, ?array $defaults): TaskList {
+        return DB::transaction(function () use ($list,$workflow,$defaults) {$data = ['workflow' => $workflow,];
+
+            if ($defaults !== null) {
+                $data['task_defaults'] = $defaults;
+            }
+
+            $list->update($data);
+
+            return $list->refresh();
+         });
     }
 }

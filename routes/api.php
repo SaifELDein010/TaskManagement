@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\WorkspaceController;
 use App\Http\Controllers\WorkspaceMembersController;
+use App\Http\Controllers\FolderController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -69,4 +70,43 @@ Route::middleware('auth:api')->group(function () {
         [WorkspaceController::class, 'restore']
     );
 
+     Route::get(
+        '/folders',
+        [FolderController::class, 'index']
+    );
+
+    Route::post(
+        '/folders',
+        [FolderController::class, 'store']
+    );
+
+    Route::get(
+        '/folders/{id}',
+        [FolderController::class, 'show']
+    );
+
+    Route::patch(
+        '/folders/{id}',
+        [FolderController::class, 'update']
+    );
+
+    Route::patch(
+        '/folders/{id}/move',
+        [FolderController::class, 'move']
+    );
+
+    Route::delete(
+        '/folders/{id}',
+        [FolderController::class, 'destroy']
+    );
+
+    Route::get(
+        '/workspaces/{workspaceId}/folders',
+        [FolderController::class, 'workspaceFolders']
+    );
+
+    Route::get(
+        '/workspaces/{workspaceId}/folders/tree',
+        [FolderController::class, 'tree']
+    );
 });

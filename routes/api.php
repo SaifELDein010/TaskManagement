@@ -83,4 +83,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/lists/{id}', [ListsController::class, 'destroy']);
 
     Route::post('/lists/{id}/restore', [ListsController::class, 'restore']);
+
+
+    Route::put('/lists/{id}/workflow', [ListsController::class,'updateWorkflow']);
 });

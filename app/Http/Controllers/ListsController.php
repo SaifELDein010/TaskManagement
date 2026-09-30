@@ -8,9 +8,12 @@ use App\Http\Requests\UpdateListRequest;
 use App\Services\ListService;
 use Illuminate\Support\Facades\Auth;
 use InvalidArgumentException;
+use App\Http\Requests\UpdateListWorkflowRequest;
+use App\Services\ListWorkflowService;
 
 class ListsController extends Controller{
-    public function __construct(private ListService $listService) {}
+    public function __construct( private ListService $listService,
+    private ListWorkflowService $listWorkflowService) {}
 
     public function index() {
         $user = Auth::guard('api')->user();
@@ -136,5 +139,32 @@ class ListsController extends Controller{
             'message' => 'List restored successfully.',
             'data' => $list,
         ]);
+    }
+
+    public function updateWorkflow(UpdateListWorkflowRequest $request, int $id) {
+        $user = Auth::guard('api')->user();
+
+        try {
+
+            $list = $this->listWorkflowService->update($user, $id, $request->validated());
+
+            if (!$list) {
+                return response()->json([
+                    'message' => 'List not found.',
+                ],404);
+            }
+
+            return response()->json([
+                'message' => 'List workflow updated successfully.',
+                'data' => $list,
+            ]);
+
+        } catch (InvalidArgumentException $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ],422);
+            
+        }
     }
 }

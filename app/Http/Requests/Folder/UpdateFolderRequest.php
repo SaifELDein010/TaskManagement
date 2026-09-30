@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Requests\Workspace;
+namespace App\Http\Requests\Folder;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateWorkspaceRequest extends FormRequest
+class UpdateFolderRequest extends FormRequest
 {
     public function authorize(): bool {
         return true;
     }
 
-    public function rules(): array{
+    public function rules(): array {
         return [
             'name' => ['sometimes', 'string', 'max:255',],
 

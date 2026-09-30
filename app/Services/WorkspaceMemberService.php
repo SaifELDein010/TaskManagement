@@ -6,18 +6,11 @@ use App\Models\WorkspaceMember;
 use App\Repositories\WorkspaceMember\WorkspaceMemberRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class WorkspaceMemberService
-{
-    public function __construct(
-        private WorkspaceMemberRepositoryInterface $workspaceMemberRepository
-    ) {
-    }
+class WorkspaceMemberService {
+    public function __construct(private WorkspaceMemberRepositoryInterface $workspaceMemberRepository) {}
 
     public function get(int $workspaceId, int $userId) {
-        $workspaceMember = $this->workspaceMemberRepository->find(
-            $workspaceId,
-            $userId
-        );
+        $workspaceMember = $this->workspaceMemberRepository->find($workspaceId, $userId);
 
         if (!$workspaceMember) {
             throw new ModelNotFoundException('Workspace member not found.');
@@ -27,10 +20,7 @@ class WorkspaceMemberService
     }
 
     public function create(int $workspaceId, int $userId) {
-        $existingMember = $this->workspaceMemberRepository->find(
-            $workspaceId,
-            $userId
-        );
+        $existingMember = $this->workspaceMemberRepository->find($workspaceId, $userId);
 
         if ($existingMember) {
             throw new \DomainException('User is already a member of this workspace.');
@@ -44,25 +34,14 @@ class WorkspaceMemberService
     }
 
     public function update(int $workspaceId, int $userId, array $data) {
-        $workspaceMember = $this->get(
-            $workspaceId,
-            $userId
-        );
+        $workspaceMember = $this->get($workspaceId, $userId);
 
-        return $this->workspaceMemberRepository->update(
-            $workspaceMember,
-            $data
-        );
+        return $this->workspaceMemberRepository->update($workspaceMember, $data);
     }
 
     public function delete(int $workspaceId, int $userId) {
-        $workspaceMember = $this->get(
-            $workspaceId,
-            $userId
-        );
+        $workspaceMember = $this->get($workspaceId, $userId);
 
-        $this->workspaceMemberRepository->delete(
-            $workspaceMember
-        );
+        $this->workspaceMemberRepository->delete($workspaceMember);
     }
 }

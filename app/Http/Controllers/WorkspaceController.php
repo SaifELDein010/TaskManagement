@@ -9,18 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class WorkspaceController extends Controller
 {
-    public function __construct(
-        private WorkspaceService $workspaceService
-    ) {
-    }
+    public function __construct(private WorkspaceService $workspaceService) {}
 
     public function store(StoreWorkspaceRequest $request) {
         $user = Auth::guard('api')->user();
 
-        $workspace = $this->workspaceService->create(
-            $user,
-            $request->validated()
-        );
+        $workspace = $this->workspaceService->create($user, $request->validated());
 
         return response()->json([
             'message' => 'Workspace created successfully.',
@@ -42,10 +36,7 @@ class WorkspaceController extends Controller
     public function show(int $id) {
         $user = Auth::guard('api')->user();
 
-        $workspace = $this->workspaceService->view(
-            $user,
-            $id
-        );
+        $workspace = $this->workspaceService->view($user, $id);
 
         if (!$workspace) {
             return response()->json([
@@ -62,10 +53,7 @@ class WorkspaceController extends Controller
     public function update(UpdateWorkspaceRequest $request, int $id){
         $user = Auth::guard('api')->user();
 
-        $workspace = $this->workspaceService->view(
-            $user,
-            $id
-        );
+        $workspace = $this->workspaceService->view($user, $id);
 
         if (!$workspace) {
             return response()->json([
@@ -73,11 +61,7 @@ class WorkspaceController extends Controller
             ], 404);
         }
 
-        $workspace = $this->workspaceService->update(
-            $user,
-            $workspace,
-            $request->validated()
-        );
+        $workspace = $this->workspaceService->update($user, $workspace, $request->validated());
 
         if (!$workspace) {
             return response()->json([
@@ -94,10 +78,7 @@ class WorkspaceController extends Controller
     public function destroy(int $id) {
         $user = Auth::guard('api')->user();
 
-        $workspace = $this->workspaceService->view(
-            $user,
-            $id
-        );
+        $workspace = $this->workspaceService->view($user,$id);
 
         if (!$workspace) {
             return response()->json([
@@ -105,10 +86,7 @@ class WorkspaceController extends Controller
             ], 404);
         }
 
-        $deleted = $this->workspaceService->delete(
-            $user,
-            $workspace
-        );
+        $deleted = $this->workspaceService->delete($user, $workspace);
 
         if (!$deleted) {
             return response()->json([
@@ -124,10 +102,7 @@ class WorkspaceController extends Controller
     public function restore(int $id){
         $user = Auth::guard('api')->user();
 
-        $workspace = $this->workspaceService->restore(
-            $user,
-            $id
-        );
+        $workspace = $this->workspaceService->restore($user, $id);
 
         if (!$workspace) {
             return response()->json([

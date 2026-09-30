@@ -7,13 +7,11 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWT;
 
-class AuthService
-{
+class AuthService{
     public function __construct(
         private UserRepositoryInterface $userRepository,
         private JWT $jwt
-    ) {
-    }
+    ) {}
 
     private function userResponse(User $user) {
         return [
@@ -74,10 +72,7 @@ class AuthService
             throw new \RuntimeException('Invalid credentials');
         }
 
-        $user = $this->userRepository->updatePassword(
-            $user,
-            Hash::make($data['new_password'])
-        );
+        $user = $this->userRepository->updatePassword($user, Hash::make($data['new_password']));
 
         return $this->userResponse($user);
     }

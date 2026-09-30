@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\WorkspaceMember;
+namespace App\Http\Requests\Folder;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateWorkspaceMemberRequest extends FormRequest
+class MoveFolderRequest extends FormRequest
 {
     public function authorize(): bool {
         return true;
@@ -12,7 +12,7 @@ class UpdateWorkspaceMemberRequest extends FormRequest
 
     public function rules(): array {
         return [
-            'is_owner' => ['sometimes', 'boolean',],
+            'parent_id' => ['nullable', 'integer', 'exists:folders,id',],
         ];
     }
 }

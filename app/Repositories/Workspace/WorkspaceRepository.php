@@ -10,24 +10,10 @@ class WorkspaceRepository implements WorkspaceRepositoryInterface {
     private function isOwner(User $user, Workspace $workspace) {
 
         return Workspace::query()
-            ->join(
-                'workspace_members',
-                'workspace_members.workspace_id',
-                '=',
-                'workspaces.id'
-            )
-            ->where(
-                'workspaces.id',
-                $workspace->id
-            )
-            ->where(
-                'workspace_members.user_id',
-                $user->id
-            )
-            ->where(
-                'workspace_members.is_owner',
-                true
-            )
+            ->join('workspace_members','workspace_members.workspace_id','=','workspaces.id')
+            ->where('workspaces.id',$workspace->id)
+            ->where('workspace_members.user_id', $user->id)
+            ->where('workspace_members.is_owner', true)
             ->exists();
 
     }
@@ -37,35 +23,17 @@ class WorkspaceRepository implements WorkspaceRepositoryInterface {
 
     public function list(User $user) {
         return Workspace::query()
-            ->join(
-                'workspace_members',
-                'workspace_members.workspace_id',
-                '=',
-                'workspaces.id'
-            )
-            ->where(
-                'workspace_members.user_id',
-                $user->id
-            )
+            ->join('workspace_members', 'workspace_members.workspace_id', '=', 'workspaces.id')
+            ->where('workspace_members.user_id', $user->id)
             ->select('workspaces.*')
             ->get();
     }
+
     public function view(User $user, int $id) {
         return Workspace::query()
-            ->join(
-                'workspace_members',
-                'workspace_members.workspace_id',
-                '=',
-                'workspaces.id'
-            )
-            ->where(
-                'workspace_members.user_id',
-                $user->id
-            )
-            ->Where(
-                'workspaces.id',
-                $id
-            )
+            ->join('workspace_members', 'workspace_members.workspace_id', '=', 'workspaces.id')
+            ->where('workspace_members.user_id', $user->id)
+            ->Where('workspaces.id', $id)
             ->select('workspaces.*')
             ->first();
     }
@@ -105,5 +73,4 @@ class WorkspaceRepository implements WorkspaceRepositoryInterface {
 
         return $workspace->refresh();
     }
-
 }

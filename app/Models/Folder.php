@@ -30,4 +30,8 @@ class Folder extends Model {
     public function children(): HasMany{
         return $this->hasMany(Folder::class,'parent_id');
     }
+
+    public function lists(): HasMany {
+        return $this->hasMany(TaskList::class);
+    }
 }

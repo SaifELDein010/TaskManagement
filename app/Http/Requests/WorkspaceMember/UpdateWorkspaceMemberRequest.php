@@ -12,10 +12,7 @@ class UpdateWorkspaceMemberRequest extends FormRequest
 
     public function rules(): array {
         return [
-            'is_owner' => [
-                'sometimes',
-                'boolean',
-            ],
+            'is_owner' => ['sometimes', 'boolean',],
         ];
     }
 }

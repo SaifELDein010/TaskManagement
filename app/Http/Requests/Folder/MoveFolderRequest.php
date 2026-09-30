@@ -12,11 +12,7 @@ class MoveFolderRequest extends FormRequest
 
     public function rules(): array {
         return [
-            'parent_id' => [
-                'nullable',
-                'integer',
-                'exists:folders,id',
-            ],
+            'parent_id' => ['nullable', 'integer', 'exists:folders,id',],
         ];
     }
 }

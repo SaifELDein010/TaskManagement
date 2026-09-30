@@ -5,8 +5,7 @@ namespace App\Repositories\Folder;
 use App\Models\Folder;
 use App\Models\User;
 
-class FolderRepository implements FolderRepositoryInterface
-{
+class FolderRepository implements FolderRepositoryInterface {
     public function create(array $data) {
         return Folder::create($data);
     } 
@@ -20,26 +19,20 @@ class FolderRepository implements FolderRepositoryInterface
     public function findForUser(User $user, int $id): ?Folder {
         return Folder::query()
             ->where('folders.id', $id)
-            ->whereHas('workspace.members', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
+            ->whereHas('workspace.members', function ($query) use ($user) {$query->where('user_id', $user->id);})
             ->first();
     }
 
     public function getAllForUser(User $user){
         return Folder::query()
-            ->whereHas('workspace.members', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
+            ->whereHas('workspace.members', function ($query) use ($user) {$query->where('user_id', $user->id);})
             ->get();
     }
 
     public function getAllForWorkspace(User $user, int $workspaceId){
         return Folder::query()
             ->where('workspace_id', $workspaceId)
-            ->whereHas('workspace.members', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
+            ->whereHas('workspace.members', function ($query) use ($user) {$query->where('user_id', $user->id);})
             ->orderBy('parent_id')
             ->orderBy('id')
             ->get();

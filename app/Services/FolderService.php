@@ -8,12 +8,8 @@ use App\Repositories\Folder\FolderRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use InvalidArgumentException;
 
-class FolderService
-{
-    public function __construct(
-        private FolderRepositoryInterface $folderRepository
-    ) {
-    }
+class FolderService {
+    public function __construct(private FolderRepositoryInterface $folderRepository) {}
 
     public function create(User $user, array $data): Folder {
         if (!empty($data['parent_id'])) {
@@ -176,6 +172,7 @@ class FolderService
     private function addToTree(array &$tree, Folder $folder ): void {
         foreach ($tree as &$parent) {
             if ($parent['id'] === $folder->parent_id) {
+
                 $parent['children'][] = array_merge(
                     $folder->toArray(),
                     [
@@ -187,11 +184,9 @@ class FolderService
             }
 
             if (!empty($parent['children'])) {
-                $this->addToTree(
-                    $parent['children'],
-                    $folder
-                );
+                $this->addToTree($parent['children'], $folder);
             }
         }
+        
     }
 }

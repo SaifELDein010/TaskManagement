@@ -11,17 +11,9 @@ class StoreWorkspaceMemberRequest extends FormRequest {
 
     public function rules(): array {
         return [
-            'workspaceId' => [
-                'required',
-                'integer',
-                'exists:workspaces,id',
-            ],
+            'workspaceId' => ['required', 'integer', 'exists:workspaces,id',],
 
-            'userId' => [
-                'required',
-                'integer',
-                'exists:users,id',
-            ],
+            'userId' => ['required', 'integer', 'exists:users,id',],
         ];
     }
 

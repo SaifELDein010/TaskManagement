@@ -12,28 +12,13 @@ class StoreFolderRequest extends FormRequest
 
     public function rules(): array {
         return [
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-            ],
+            'name' => ['required', 'string', 'max:255',],
 
-            'description' => [
-                'nullable',
-                'string',
-            ],
+            'description' => ['nullable', 'string',],
 
-            'workspace_id' => [
-                'required',
-                'integer',
-                'exists:workspaces,id',
-            ],
+            'workspace_id' => ['required', 'integer', 'exists:workspaces,id',],
 
-            'parent_id' => [
-                'nullable',
-                'integer',
-                'exists:folders,id',
-            ],
+            'parent_id' => ['nullable', 'integer', 'exists:folders,id',],
         ];
     }
 }

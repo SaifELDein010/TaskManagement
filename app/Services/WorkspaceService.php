@@ -12,8 +12,7 @@ class WorkspaceService {
     public function __construct(
         private WorkspaceRepositoryInterface $workspaceRepository,
         private WorkspaceMemberRepositoryInterface $workspaceMemberRepository
-    ) {
-    }
+    ) {}
 
     public function create(User $user, array $data): Workspace {
         
@@ -58,5 +57,4 @@ class WorkspaceService {
             $workspace
         );
     }
-
 }

@@ -43,4 +43,8 @@ class User extends Authenticatable implements JWTSubject {
     public function createdFolders(): HasMany {
         return $this->hasMany(Folder::class, 'created_by');
     }
+
+    public function createdLists(): HasMany {
+        return $this->hasMany(TaskList::class, 'created_by');
+    }
 }

@@ -6,16 +6,11 @@ use App\Http\Requests\Folder\MoveFolderRequest;
 use App\Http\Requests\Folder\StoreFolderRequest;
 use App\Http\Requests\Folder\UpdateFolderRequest;
 use App\Services\FolderService;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use InvalidArgumentException;
 
-class FolderController extends Controller
-{
-    public function __construct(
-        private FolderService $folderService
-    ) {
-    }
+class FolderController extends Controller{
+    public function __construct(private FolderService $folderService) {}
 
     public function index() {
         $user = Auth::guard('api')->user();
@@ -47,6 +42,7 @@ class FolderController extends Controller
         $user = Auth::guard('api')->user();
 
         try {
+
             $folder = $this->folderService->create($user, $request->validated());
 
             return response()->json([
@@ -55,9 +51,11 @@ class FolderController extends Controller
             ], 201);
 
         } catch (InvalidArgumentException $e) {
+
             return response()->json([
                 'message' => $e->getMessage(),
             ], 422);
+
         }
     }
 
@@ -74,10 +72,7 @@ class FolderController extends Controller
     public function tree(int $workspaceId) {
         $user = Auth::guard('api')->user();
 
-        $tree = $this->folderService->getTree(
-            $user,
-            $workspaceId
-        );
+        $tree = $this->folderService->getTree($user, $workspaceId);
 
         return response()->json([
             'data' => $tree,
@@ -88,11 +83,8 @@ class FolderController extends Controller
         $user = Auth::guard('api')->user();
 
         try {
-            $folder = $this->folderService->update(
-                $user,
-                $id,
-                $request->validated()
-            );
+
+            $folder = $this->folderService->update($user, $id, $request->validated());
 
             if (!$folder) {
                 return response()->json([
@@ -106,9 +98,11 @@ class FolderController extends Controller
             ]);
 
         } catch (InvalidArgumentException $e) {
+
             return response()->json([
                 'message' => $e->getMessage(),
             ], 422);
+
         }
     }
 
@@ -116,11 +110,8 @@ class FolderController extends Controller
         $user = Auth::guard('api')->user();
 
         try {
-            $folder = $this->folderService->move(
-                $user,
-                $id,
-                $request->validated()['parent_id']
-            );
+
+            $folder = $this->folderService->move($user, $id, $request->validated()['parent_id']);
 
             if (!$folder) {
                 return response()->json([
@@ -134,9 +125,11 @@ class FolderController extends Controller
             ]);
 
         } catch (InvalidArgumentException $e) {
+
             return response()->json([
                 'message' => $e->getMessage(),
             ], 422);
+
         }
     }
 
@@ -144,10 +137,8 @@ class FolderController extends Controller
         $user = Auth::guard('api')->user();
 
         try {
-            $deleted = $this->folderService->delete(
-                $user,
-                $id
-            );
+
+            $deleted = $this->folderService->delete($user, $id);
 
             if (!$deleted) {
                 return response()->json([
@@ -160,9 +151,11 @@ class FolderController extends Controller
             ]);
 
         } catch (InvalidArgumentException $e) {
+
             return response()->json([
                 'message' => $e->getMessage(),
             ], 422);
+            
         }
     }
 }

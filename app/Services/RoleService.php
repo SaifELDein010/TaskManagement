@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
-class RoleService
-{
+class RoleService {
     private const GUARD = 'api';
 
     public function createRole(array $data): Role {
@@ -35,9 +34,7 @@ class RoleService
     public function updateRole(Role $role, array $data): Role {
         $this->ensureApiGuard($role);
 
-        $role->update([
-            'name' => $data['name'],
-        ]);
+        $role->update(['name' => $data['name'],]);
 
         return $role->refresh()->load('permissions');
     }
@@ -54,10 +51,7 @@ class RoleService
         $role->delete();
     }
 
-    public function syncPermissions(
-        Role $role,
-        array $permissionNames
-    ): Role {
+    public function syncPermissions(Role $role, array $permissionNames): Role {
         $this->ensureApiGuard($role);
 
         $permissions = Permission::query()

@@ -23,4 +23,8 @@ class Workspace extends Model {
     public function folders(): HasMany {
         return $this->hasMany(Folder::class);
     }
+
+    public function lists(): HasMany {
+        return $this->hasMany(TaskList::class);
+    }
 }

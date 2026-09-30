@@ -19,14 +19,7 @@ class UpdateRoleRequest extends FormRequest
         }
 
         return [
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('roles', 'name')
-                    ->where('guard_name', 'api')
-                    ->ignore($roleId),
-            ],
+            'name' => ['required', 'string', 'max:255', Rule::unique('roles', 'name')->where('guard_name', 'api')->ignore($roleId),],
         ];
     }
 }

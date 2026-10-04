@@ -8,6 +8,7 @@ use App\Http\Controllers\WorkspaceController;
 use App\Http\Controllers\WorkspaceMembersController;
 use App\Http\Controllers\FolderController;
 use App\Http\Controllers\ListsController;
+use App\Http\Controllers\TaskController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -85,5 +86,24 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/lists/{id}/restore', [ListsController::class, 'restore']);
 
 
+
     Route::put('/lists/{id}/workflow', [ListsController::class,'updateWorkflow']);
+
+
+
+    Route::post('/lists/{listId}/tasks', [TaskController::class, 'store']);
+
+    Route::get('/tasks/{taskId}', [TaskController::class, 'show']);
+
+    Route::get('/lists/{listId}/tasks', [TaskController::class, 'listTasks']);
+    
+    Route::get('/workspaces/{workspaceId}/tasks', [TaskController::class, 'workspaceTasks']);
+
+    Route::patch('/tasks/{taskId}', [TaskController::class, 'update']);
+    
+    Route::post('/tasks/{taskId}/move', [TaskController::class, 'move']);
+
+    Route::delete('/tasks/{taskId}', [TaskController::class, 'destroy']);
+    
+    Route::post('/tasks/{taskId}/restore', [TaskController::class, 'restore']);
 });

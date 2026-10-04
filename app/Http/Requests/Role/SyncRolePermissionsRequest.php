@@ -13,17 +13,9 @@ class SyncRolePermissionsRequest extends FormRequest
 
     public function rules(): array {
         return [
-            'permissions' => [
-                'required',
-                'array',
-            ],
+            'permissions' => ['required','array',],
 
-            'permissions.*' => [
-                'required',
-                'string',
-                Rule::exists('permissions', 'name')
-                    ->where('guard_name', 'api'),
-            ],
+            'permissions.*' => ['required','string', Rule::exists('permissions', 'name')->where('guard_name', 'api'),],
         ];
     }
 }

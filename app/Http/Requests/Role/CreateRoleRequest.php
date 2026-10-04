@@ -12,13 +12,7 @@ class CreateRoleRequest extends FormRequest {
 
     public function rules(): array {
         return [
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('roles', 'name')
-                    ->where('guard_name', 'api'),
-            ],
+            'name' => ['required', 'string', 'max:255', Rule::unique('roles', 'name')->where('guard_name', 'api'),],
         ];
     }
 }

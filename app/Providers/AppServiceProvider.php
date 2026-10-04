@@ -9,6 +9,8 @@ use App\Repositories\Workspace\WorkspaceRepository;
 use App\Repositories\Workspace\WorkspaceRepositoryInterface;
 use App\Repositories\WorkspaceMember\WorkspaceMemberRepository;
 use App\Repositories\WorkspaceMember\WorkspaceMemberRepositoryInterface;
+use App\Repositories\Folder\FolderRepository;
+use App\Repositories\Folder\FolderRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             WorkspaceMemberRepositoryInterface::class,
             WorkspaceMemberRepository::class
+        );
+
+        $this->app->bind(
+            FolderRepositoryInterface::class,
+            FolderRepository::class
         );
     }
 

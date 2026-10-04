@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\TaskList;
 use App\Models\User;
 use App\Repositories\List\ListRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
 use InvalidArgumentException;
 
 class ListService {

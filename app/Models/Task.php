@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Task extends Model {
     use SoftDeletes;
@@ -34,5 +35,17 @@ class Task extends Model {
 
     public function assignee(): BelongsTo {
         return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    public function statusHistories(): HasMany {
+        return $this->hasMany(TaskStatusHistory::class);
+    }
+
+    public function relationships(): HasMany{
+        return $this->hasMany(TaskRelationship::class, 'task_id');
+    }
+
+    public function relatedRelationships(): HasMany {
+        return $this->hasMany(TaskRelationship::class, 'related_task_id');
     }
 }

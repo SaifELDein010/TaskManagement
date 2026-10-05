@@ -106,4 +106,18 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/tasks/{taskId}', [TaskController::class, 'destroy']);
     
     Route::post('/tasks/{taskId}/restore', [TaskController::class, 'restore']);
+
+
+
+    Route::post('/tasks/{taskId}/assignee', [TaskController::class, 'assign']);
+
+    Route::post('/tasks/{taskId}/priority', [TaskController::class, 'priority']);
+    
+    Route::post('/tasks/{taskId}/status', [TaskController::class, 'status']);
+
+    Route::get('/tasks/{taskId}/relationships', [TaskController::class, 'relationships']);
+
+    Route::post('/tasks/{taskId}/relationships', [TaskController::class, 'createRelationship']);
+
+    Route::delete('/tasks/{taskId}/relationships', [TaskController::class, 'deleteRelationship']);
 });

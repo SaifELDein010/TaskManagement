@@ -9,6 +9,7 @@ use App\Http\Controllers\WorkspaceMembersController;
 use App\Http\Controllers\FolderController;
 use App\Http\Controllers\ListsController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CommentsController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -120,4 +121,14 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/tasks/{taskId}/relationships', [TaskController::class, 'createRelationship']);
 
     Route::delete('/tasks/{taskId}/relationships', [TaskController::class, 'deleteRelationship']);
+
+
+
+    Route::post('/tasks/{taskId}/comments', [CommentsController::class, 'store']);
+
+    Route::get('/tasks/{taskId}/comments', [CommentsController::class, 'index']);
+
+    Route::patch('/comments/{comment}', [CommentsController::class, 'update']);
+
+    Route::delete('/comments/{comment}', [CommentsController::class, 'destroy']);
 });

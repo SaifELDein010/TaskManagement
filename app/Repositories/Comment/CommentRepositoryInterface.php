@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Contracts;
+namespace App\Repositories\Comment;
 
 use App\Models\Comment;
 use Illuminate\Support\Collection;

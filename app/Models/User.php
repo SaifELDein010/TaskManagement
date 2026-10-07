@@ -63,4 +63,8 @@ class User extends Authenticatable implements JWTSubject {
     public function attachments(): HasMany {
         return $this->hasMany(Attachment::class);
     }
+
+    public function activityLogs(): HasMany {
+        return $this->hasMany(ActivityLog::class, 'actor_id');
+    }
 }

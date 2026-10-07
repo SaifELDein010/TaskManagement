@@ -11,6 +11,7 @@ use App\Http\Controllers\ListsController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\AttachmentsController;
+use App\Http\Controllers\ActivityLogController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -142,4 +143,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/attachments/{attachment}/download', [AttachmentsController::class, 'download']);
 
     Route::delete('/attachments/{attachment}', [AttachmentsController::class, 'destroy']);
+
+
+
+    Route::get('/workspaces/{workspace}/activity', [ActivityLogController::class, 'index']);
+
+    Route::post('/workspaces/{workspaceId}/activity/export', [ActivityLogController::class, 'export']);
 });

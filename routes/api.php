@@ -10,6 +10,7 @@ use App\Http\Controllers\FolderController;
 use App\Http\Controllers\ListsController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\AttachmentsController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -131,4 +132,14 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('/comments/{comment}', [CommentsController::class, 'update']);
 
     Route::delete('/comments/{comment}', [CommentsController::class, 'destroy']);
+
+
+
+    Route::post('/tasks/{taskId}/attachments', [AttachmentsController::class, 'store']);
+
+    Route::get('/tasks/{taskId}/attachments', [AttachmentsController::class, 'index']);
+
+    Route::get('/attachments/{attachment}/download', [AttachmentsController::class, 'download']);
+
+    Route::delete('/attachments/{attachment}', [AttachmentsController::class, 'destroy']);
 });

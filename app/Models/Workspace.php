@@ -27,4 +27,8 @@ class Workspace extends Model {
     public function lists(): HasMany {
         return $this->hasMany(TaskList::class);
     }
+
+    public function activityLogs(): HasMany {
+        return $this->hasMany(ActivityLog::class);
+    }
 }

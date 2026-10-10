@@ -10,12 +10,17 @@ use App\Repositories\WorkspaceMember\WorkspaceMemberRepositoryInterface;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use App\Services\ActivityLogService;
+use App\Activities\Task\TaskStatusChanged;
+use App\Activities\Task\TaskPriorityChanged;
+use App\Activities\Task\TaskAssigned;
 
 class TaskWorkflowService{
     public function __construct(
         private TaskRepositoryInterface $taskRepository,
         private WorkspaceMemberRepositoryInterface $workspaceMemberRepository,
-        private StatusHistoryRepositoryInterface $statusHistoryRepository
+        private StatusHistoryRepositoryInterface $statusHistoryRepository,
+        private ActivityLogService $activityLogService
     ) {}
 
     public function changeStatus(User $user, int $taskId, string $newStatus): Task {
@@ -44,10 +49,18 @@ class TaskWorkflowService{
                 'changed_by' => $user->id,
             ]);
 
+            $workspaceId = $task->list->workspace_id;
+
+            $this->activityLogService->create(
+                workspaceId: $workspaceId,
+                actorId: $user->id,
+                activity: new TaskStatusChanged(oldStatus: $oldStatus, newStatus: $newStatus,),
+                subjectId: $task->id,
+            );
+
             return $task;
         });
     }
-
     private function validateTransition(string $from, string $to): void {
         $transitions = [
             'pending' => ['in_progress', 'cancelled',],
@@ -68,33 +81,75 @@ class TaskWorkflowService{
         }
     }
 
-    public function updatePriority(int $taskId, string $priority): Task {
-        $task = $this->taskRepository->find($taskId);
+    public function updatePriority(User $user, int $taskId, string $priority): Task {
+        return DB::transaction(function () use ($user, $taskId, $priority) {
+            $task = $this->taskRepository->find($taskId);
 
-        if (!$task) {
-            throw (new ModelNotFoundException)->setModel(Task::class, [$taskId]);
-        }
+            if (!$task) {
+                throw (new ModelNotFoundException)->setModel(Task::class, [$taskId]);
+            }
 
-        return $this->taskRepository->update($task,['priority' => $priority,]);
+            $oldPriority = $task->priority;
+
+            if ($oldPriority === $priority) {
+                throw ValidationException::withMessages([
+                    'priority' => 'The task is already using this priority.',
+                ]);
+            }
+
+            $task = $this->taskRepository->update($task,['priority' => $priority,]);
+
+            $workspaceId = $task->list->workspace_id;
+
+            $this->activityLogService->create(
+                workspaceId: $workspaceId,
+                actorId: $user->id,
+                activity: new TaskPriorityChanged(oldPriority: $oldPriority, newPriority: $priority,),
+                subjectId: $task->id,
+            );
+
+            return $task;
+        });
     }
 
-    public function assign(int $taskId, int $assigneeId): Task {
-        $task = $this->taskRepository->find($taskId);
+    public function assign(User $user, int $taskId, int $assigneeId): Task {
+        return DB::transaction(function () use ($user, $taskId, $assigneeId) {
+            $task = $this->taskRepository->find($taskId);
 
-        if (!$task) {
-            throw (new ModelNotFoundException)->setModel(Task::class, [$taskId]);
-        }
+            if (!$task) {
+                throw (new ModelNotFoundException)->setModel(Task::class, [$taskId]);
+            }
 
-        $workspaceId = $task->list->workspace_id;
+            $workspaceId = $task->list->workspace_id;
 
-        $workspaceMember = $this->workspaceMemberRepository->find($workspaceId, $assigneeId);
+            $workspaceMember = $this->workspaceMemberRepository->find($workspaceId, $assigneeId);
 
-        if (!$workspaceMember) {
-            throw ValidationException::withMessages([
-                'assigned_to' => 'The selected user is not a member of this workspace.',
-            ]);
-        }
+            if (!$workspaceMember) {
+                throw ValidationException::withMessages([
+                    'assigned_to' =>
+                        'The selected user is not a member of this workspace.',
+                ]);
+            }
 
-        return $this->taskRepository->update($task,['assigned_to' => $assigneeId,]  );
+            $oldAssigneeId = $task->assigned_to;
+
+            if ($oldAssigneeId === $assigneeId) {
+                throw ValidationException::withMessages([
+                    'assigned_to' =>
+                        'The task is already assigned to this user.',
+                ]);
+            }
+
+            $task = $this->taskRepository->update($task, ['assigned_to' => $assigneeId,]);
+
+            $this->activityLogService->create(
+                workspaceId: $workspaceId,
+                actorId: $user->id,
+                activity: new TaskAssigned(oldAssigneeId: $oldAssigneeId, newAssigneeId: $assigneeId,),
+                subjectId: $task->id,
+            );
+
+            return $task;
+        });
     }
 }

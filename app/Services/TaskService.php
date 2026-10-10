@@ -6,14 +6,34 @@ use App\Models\Task;
 use App\Models\User;
 use App\Repositories\Task\TaskRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
+use App\Services\ActivityLogService;
+use App\Activities\Task\TaskCreated;
+use App\Activities\Task\TaskDeleted;
 
 class TaskService {
-    public function __construct(private TaskRepositoryInterface $taskRepository) {}
+    public function __construct(
+        private TaskRepositoryInterface $taskRepository,
+        private ActivityLogService $activityLogService,
+    ) {}
 
     public function create(User $user, array $data): Task {
-        $data['created_by'] = $user->id;
+        return DB::transaction(function () use ($user, $data) {
+            $data['created_by'] = $user->id;
 
-        return $this->taskRepository->create($data);
+            $task = $this->taskRepository->create($data);
+
+            $workspaceId = $task->list->workspace_id;
+
+            $this->activityLogService->create(
+                workspaceId: $workspaceId,
+                actorId: $user->id,
+                activity: new TaskCreated(),
+                subjectId: $task->id,
+            );
+
+            return $task;
+        });
     }
 
     public function getTask(int $taskId): Task {
@@ -46,10 +66,23 @@ class TaskService {
         return $this->taskRepository->move($task, $data);
     }
 
-    public function delete(int $taskId): bool {
-        $task = $this->getTask($taskId);
+    public function delete(User $user, int $taskId): bool {
+        return DB::transaction(function () use ($user, $taskId) {
+            $task = $this->getTask($taskId);
 
-        return $this->taskRepository->delete($task);
+            $workspaceId = $task->list->workspace_id;
+
+            $result = $this->taskRepository->delete($task);
+
+            $this->activityLogService->create(
+                workspaceId: $workspaceId,
+                actorId: $user->id,
+                activity: new TaskDeleted(),
+                subjectId: $task->id,
+            );
+
+            return $result;
+        });
     }
 
     public function restore(int $taskId): Task {

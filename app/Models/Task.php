@@ -48,4 +48,8 @@ class Task extends Model {
     public function relatedRelationships(): HasMany {
         return $this->hasMany(TaskRelationship::class, 'related_task_id');
     }
+
+    public function comments(): HasMany {
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -7,6 +7,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Folder;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable implements JWTSubject {
 
@@ -66,5 +67,13 @@ class User extends Authenticatable implements JWTSubject {
 
     public function activityLogs(): HasMany {
         return $this->hasMany(ActivityLog::class, 'actor_id');
+    }
+
+    public function notifications(): HasMany {
+        return $this->hasMany(Notification::class);
+    }
+
+    public function notificationPreference(): HasOne {
+        return $this->hasOne(NotificationPreference::class);
     }
 }

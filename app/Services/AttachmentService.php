@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Models\Attachment;
 use App\Models\User;
-use App\Repositories\Contracts\AttachmentRepositoryInterface;
+use App\Models\Task;
+use App\Events\AttachmentUploaded;
+use App\Repositories\Attachment\AttachmentRepositoryInterface;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +24,7 @@ class AttachmentService {
 
         $path = $file->storeAs("tasks/{$taskId}/attachments", $filename, $this->disk);
 
-        return $this->attachmentRepository->create([
+        $attachment = $this->attachmentRepository->create([
             'task_id' => $taskId,
             'user_id' => $user->id,
             'original_filename' => $file->getClientOriginalName(),
@@ -33,6 +35,10 @@ class AttachmentService {
             'size' => $file->getSize(),
             'hash' => $hash,
         ]);
+
+        AttachmentUploaded::dispatch($attachment, Task::findOrFail($taskId), $user->id);
+
+        return $attachment;
     }
 
     public function getByTask(int $taskId): Collection {

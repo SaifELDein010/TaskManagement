@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use App\Services\ActivityLogService;
 use Illuminate\Support\Facades\DB;
 use App\Activities\Comment\CommentCreated;
+use App\Events\CommentCreated as CommentCreatedEvent;
 
 class CommentService {
     public function __construct(
@@ -62,6 +63,8 @@ class CommentService {
                 subjectId: $comment->id,
             );
 
+            CommentCreatedEvent::dispatch($comment, $task, $userId);
+
             return $comment;
         });
     }
@@ -91,7 +94,9 @@ class CommentService {
             ->map(function (Comment $comment) use ($grouped) {
                 $comment->setRelation('replies', $this->buildReplies($grouped, $comment->id));
 
-                return $comment;
+                // CommentCreatedEvent::dispatch($comment, $task, $userId);
+
+            return $comment;
             })
             ->values();
     }

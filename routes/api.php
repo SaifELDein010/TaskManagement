@@ -12,6 +12,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\AttachmentsController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\NotificationController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -149,4 +150,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/workspaces/{workspace}/activity', [ActivityLogController::class, 'index']);
 
     Route::post('/workspaces/{workspaceId}/activity/export', [ActivityLogController::class, 'export']);
+
+
+
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    
+    Route::get('/notification-preferences', [NotificationController::class, 'preferences']);
+    
+    Route::put('/notification-preferences', [NotificationController::class, 'updatePreferences']);
 });

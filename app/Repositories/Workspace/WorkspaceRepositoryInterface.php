@@ -13,4 +13,5 @@ interface WorkspaceRepositoryInterface {
     public function delete(User $user, workspace $workspace);
     public function findForRestore(int $id): ?Workspace;
     public function restore(User $user, Workspace $workspace): ?Workspace;
+    public function findForAuthorization(int $id, bool $includeTrashed = false): ?Workspace;
 }

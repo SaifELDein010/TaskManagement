@@ -11,4 +11,5 @@ interface CommentRepositoryInterface {
     public function getByTaskId(int $taskId): Collection;
     public function update(Comment $comment, array $data): Comment;
     public function delete(Comment $comment): bool;
+    public function findForAuthorization(int $id): ?Comment;
 }

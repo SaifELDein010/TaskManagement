@@ -10,4 +10,5 @@ interface AttachmentRepositoryInterface {
     public function findById(int $id): ?Attachment;
     public function getByTaskId(int $taskId): Collection;
     public function delete(Attachment $attachment): bool;
+    public function findForAuthorization(int $id): ?Attachment; 
 }

@@ -48,4 +48,14 @@ class TaskRepository implements TaskRepositoryInterface {
         
         return $task->refresh();
     }
+
+    public function findForAuthorization(int $taskId, bool $includeTrashed = false): ?Task {
+        $query = Task::query()->with(['list' => fn ($listQuery) => $listQuery->withTrashed(),]);
+
+        if ($includeTrashed) {
+            $query->withTrashed();
+        }
+
+        return $query->find($taskId);
+    }
 }

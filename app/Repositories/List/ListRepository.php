@@ -74,4 +74,14 @@ class ListRepository implements ListRepositoryInterface{
             return $list->refresh();
          });
     }
+
+    public function findForAuthorization(int $id, bool $includeTrashed = false): ?TaskList {
+        $query = TaskList::query();
+
+        if ($includeTrashed) {
+            $query->withTrashed();
+        }
+
+        return $query->find($id);
+    }
 }

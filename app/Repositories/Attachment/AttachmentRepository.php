@@ -26,4 +26,10 @@ class AttachmentRepository implements AttachmentRepositoryInterface {
     public function delete(Attachment $attachment): bool {
         return $attachment->delete();
     }
+
+    public function findForAuthorization(int $id): ?Attachment {
+        return Attachment::query()
+            ->with(['task' => fn ($taskQuery) => $taskQuery->withTrashed()->with(['list' => fn ($listQuery) => $listQuery->withTrashed(),]),])
+            ->find($id);
+    }
 }

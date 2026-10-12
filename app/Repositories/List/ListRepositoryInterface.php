@@ -16,4 +16,5 @@ interface ListRepositoryInterface {
     public function findForRestore(int $id): ?TaskList;
     public function restore(TaskList $list);
     public function updateWorkflow(TaskList $list, array $workflow, ?array $defaults): TaskList;
+    public function findForAuthorization(int $id, bool $includeTrashed = false): ?TaskList;
 }

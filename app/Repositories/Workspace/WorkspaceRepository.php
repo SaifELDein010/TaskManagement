@@ -73,4 +73,17 @@ class WorkspaceRepository implements WorkspaceRepositoryInterface {
 
         return $workspace->refresh();
     }
+
+    public function findForAuthorization(
+    int $id,
+    bool $includeTrashed = false
+): ?Workspace {
+    $query = Workspace::query();
+
+    if ($includeTrashed) {
+        $query->withTrashed();
+    }
+
+    return $query->find($id);
+}
 }

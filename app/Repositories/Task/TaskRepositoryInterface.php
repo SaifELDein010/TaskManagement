@@ -14,4 +14,5 @@ interface TaskRepositoryInterface {
     public function move(Task $task, array $data);
     public function delete(Task $task);
     public function restore(Task $task);
+    public function findForAuthorization(int $taskId, bool $includeTrashed = false): ?Task;
 }

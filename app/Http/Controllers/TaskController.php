@@ -13,6 +13,8 @@ use App\Http\Requests\Task\DeleteTaskRelationshipRequest;
 use App\Services\TaskService;
 use App\Services\TaskWorkflowService;
 use App\Services\TaskRelationshipService;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class TaskController extends Controller {
@@ -77,7 +79,7 @@ class TaskController extends Controller {
     }
 
     public function destroy(int $taskId) {
-        $this->taskService->delete($taskId);
+        $this->taskService->delete(request()->user(), $taskId);
 
         return response()->json([
             'message' => 'Task deleted successfully.',
@@ -100,13 +102,15 @@ class TaskController extends Controller {
     }
 
     public function assign(AssignTaskRequest $request, int $taskId) {
-        $task = $this->taskWorkflowService->assign($taskId, $request->integer('assigned_to'));
+        $task = $this->taskWorkflowService->assign($request->user(), $taskId, $request->integer('assigned_to'));
 
         return response()->json($task);
     }
 
     public function priority(UpdateTaskPriorityRequest $request, int $taskId) {
-        $task = $this->taskWorkflowService->updatePriority($taskId, $request->string('priority'));
+        $user = Auth::guard('api')->user();
+
+        $task = $this->taskWorkflowService->updatePriority($user, $taskId, $request->string('priority'));
 
         return response()->json($task);
     }

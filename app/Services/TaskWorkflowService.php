@@ -14,6 +14,8 @@ use App\Services\ActivityLogService;
 use App\Activities\Task\TaskStatusChanged;
 use App\Activities\Task\TaskPriorityChanged;
 use App\Activities\Task\TaskAssigned;
+use App\Events\TaskAssigned as TaskAssignedEvent;
+use App\Events\TaskStatusChanged as TaskStatusChangedEvent;
 
 class TaskWorkflowService{
     public function __construct(
@@ -57,6 +59,8 @@ class TaskWorkflowService{
                 activity: new TaskStatusChanged(oldStatus: $oldStatus, newStatus: $newStatus,),
                 subjectId: $task->id,
             );
+
+            TaskStatusChangedEvent::dispatch($task, $user->id, $oldStatus, $newStatus);
 
             return $task;
         });
@@ -148,6 +152,8 @@ class TaskWorkflowService{
                 activity: new TaskAssigned(oldAssigneeId: $oldAssigneeId, newAssigneeId: $assigneeId,),
                 subjectId: $task->id,
             );
+
+            TaskAssignedEvent::dispatch($task, $user->id, $oldAssigneeId);
 
             return $task;
         });

@@ -3,8 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Attachment;
-use App\Repositories\Contracts\AttachmentRepositoryInterface;
 use Illuminate\Support\Collection;
+use App\Repositories\Attachment\AttachmentRepositoryInterface;
 
 class AttachmentRepository implements AttachmentRepositoryInterface {
     public function create(array $data): Attachment {

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use App\Activities\Membership\MemberAdded;
 use App\Activities\Membership\MemberRoleChanged;
 use App\Activities\Membership\MemberRemoved;
+use App\Services\ActivityLogService;
+
 
 class WorkspaceMemberService {
     public function __construct(
@@ -28,6 +30,7 @@ class WorkspaceMemberService {
 
     public function create(int $workspaceId, int $userId, int $actorId) {
         return DB::transaction(function () use ($workspaceId, $userId, $actorId) {
+
             $existingMember = $this->workspaceMemberRepository->find($workspaceId, $userId);
 
             if ($existingMember) {
@@ -57,21 +60,10 @@ class WorkspaceMemberService {
         return DB::transaction(function () use ($workspaceId, $userId, $data, $actorId) {
             $workspaceMember = $this->get($workspaceId, $userId);
 
-            $oldRoleId = $workspaceMember->role_id;
-            $newRoleId = $data['role_id'] ?? $oldRoleId;
-
-            $member = $this->workspaceMemberRepository->update($workspaceMember, $data);
-
-            if ($oldRoleId !== $newRoleId) {
-                $this->activityLogService->create(
-                    workspaceId: $workspaceId,
-                    actorId: $actorId,
-                    activity: new MemberRoleChanged(oldRole: (string) $oldRoleId, newRole: (string) $newRoleId,),
-                    subjectId: $userId,
-                );
-            }
-
-            return $member;
+            return $this->workspaceMemberRepository->update(
+                $workspaceMember,
+                $data
+            );
         });
     }
 

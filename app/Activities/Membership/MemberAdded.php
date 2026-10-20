@@ -2,10 +2,10 @@
 
 namespace App\Activities\Membership;
 
-use App\Activitiess\Activity;
+use App\Activities\ActivityInterface;
 use App\Models\User;
 
-final class MemberAdded implements Activity {
+final class MemberAdded implements ActivityInterface {
     public function __construct(private readonly int $userId,) {}
 
     public function action(): string {

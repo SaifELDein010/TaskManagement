@@ -27,9 +27,17 @@ Route::middleware('auth:api')->group(function () {
 
 
 
-    Route::apiResource('roles', RoleController::class)->middleware('authorize.action:roles.manage');
+    Route::get('/roles', [RoleController::class, 'index'])->middleware('authorize.action:role.view');
 
-    Route::put('roles/{role}/permissions', [RoleController::class, 'syncPermissions'])->middleware('authorize.action:roles.manage');
+    Route::post('/roles', [RoleController::class, 'store'])->middleware('authorize.action:role.create');
+
+    Route::get('/roles/{role}', [RoleController::class, 'show'])->middleware('authorize.action:role.view');
+
+    Route::patch('/roles/{role}', [RoleController::class, 'update'])->middleware('authorize.action:role.update');
+
+    Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->middleware('authorize.action:role.delete');
+
+    Route::put('/roles/{role}/permissions', [RoleController::class, 'syncPermissions'])->middleware('authorize.action:role.permissions.update');
 
 
 
@@ -57,9 +65,9 @@ Route::middleware('auth:api')->group(function () {
 
 
 
-    Route::get('/folders', [FolderController::class, 'index'])->middleware('authorize.action:folder.view');
-
     Route::post('/folders', [FolderController::class, 'store'])->middleware('authorize.action:folder.create');
+    
+    Route::get('/folders', [FolderController::class, 'index'])->middleware('authorize.action:folder.view');
 
     Route::get('/folders/{id}', [FolderController::class, 'show'])->middleware('authorize.action:folder.view,folder,id');
 
@@ -75,9 +83,9 @@ Route::middleware('auth:api')->group(function () {
 
 
 
-    Route::get('/lists', [ListsController::class, 'index'])->middleware('authorize.action:list.view');
-
     Route::post('/lists', [ListsController::class, 'store'])->middleware('authorize.action:list.create');
+    
+    Route::get('/lists', [ListsController::class, 'index'])->middleware('authorize.action:list.view');
 
     Route::get('/lists/{id}', [ListsController::class, 'show'])->middleware('authorize.action:list.view,list,id');
 
@@ -98,14 +106,14 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/lists/{listId}/tasks', [TaskController::class, 'store'])->middleware('authorize.action:task.create,list,listId');
 
     Route::get('/tasks/{taskId}', [TaskController::class, 'show'])->middleware('authorize.action:task.view,task,taskId');
-
+ 
     Route::get('/lists/{listId}/tasks', [TaskController::class, 'listTasks'])->middleware('authorize.action:task.view,list,listId');
 
     Route::get('/workspaces/{workspaceId}/tasks', [TaskController::class, 'workspaceTasks'])->middleware('authorize.action:task.view,workspace,workspaceId');
 
     Route::patch('/tasks/{taskId}', [TaskController::class, 'update'])->middleware('authorize.action:task.update,task,taskId');
 
-    Route::post('/tasks/{taskId}/move', [TaskController::class, 'move'])->middleware('authorize.action:task.move,task,taskId');
+    Route::patch('/tasks/{taskId}/move', [TaskController::class, 'move'])->middleware('authorize.action:task.move,task,taskId');
 
     Route::delete('/tasks/{taskId}', [TaskController::class, 'destroy'])->middleware('authorize.action:task.delete,task,taskId');
 
@@ -119,16 +127,18 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/tasks/{taskId}/status', [TaskController::class, 'status'])->middleware('authorize.action:task.change_status,task,taskId');
 
-    Route::get('/tasks/{taskId}/relationships', [TaskController::class, 'relationships'])->middleware('authorize.action:task.view,task,taskId');
+
 
     Route::post('/tasks/{taskId}/relationships', [TaskController::class, 'createRelationship'])->middleware('authorize.action:task.update,task,taskId');
+    
+    Route::get('/tasks/{taskId}/relationships', [TaskController::class, 'relationships'])->middleware('authorize.action:task.view,task,taskId');
 
     Route::delete('/tasks/{taskId}/relationships', [TaskController::class, 'deleteRelationship'])->middleware('authorize.action:task.update,task,taskId');
 
 
 
     Route::post('/tasks/{taskId}/comments', [CommentsController::class, 'store'])->middleware('authorize.action:comment.create,task,taskId');
-
+    
     Route::get('/tasks/{taskId}/comments', [CommentsController::class, 'index'])->middleware('authorize.action:comment.view,task,taskId');
 
     Route::patch('/comments/{comment}', [CommentsController::class, 'update'])->middleware('authorize.action:comment.update,comment,comment');

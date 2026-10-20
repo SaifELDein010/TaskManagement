@@ -3,18 +3,18 @@
 namespace App\Repositories\Workspace;
 
 use App\Models\Workspace;
+use App\Models\WorkspaceMember;
 use App\Models\User;
 
 class WorkspaceRepository implements WorkspaceRepositoryInterface {
 
     private function isOwner(User $user, Workspace $workspace) {
 
-        return Workspace::query()
-            ->join('workspace_members','workspace_members.workspace_id','=','workspaces.id')
-            ->where('workspaces.id',$workspace->id)
-            ->where('workspace_members.user_id', $user->id)
-            ->where('workspace_members.is_owner', true)
-            ->exists();
+        return WorkspaceMember::query()
+        ->where('workspace_id', $workspace->id)
+        ->where('user_id', $user->id)
+        ->where('is_owner', true)
+        ->exists();
 
     }
     public function create(array $data) {

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Activitiess;
+namespace App\Activities;
 
-interface Activity {
+interface ActivityInterface {
     public function action(): string;
     public function metadata(): array;
     public function subjectType(): string;

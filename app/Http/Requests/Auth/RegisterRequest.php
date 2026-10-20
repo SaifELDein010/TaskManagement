@@ -15,7 +15,7 @@ class RegisterRequest extends FormRequest
             'username' => ['required', 'string', 'unique:users,username'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
-            'role' => ['nullable', 'in:Super Admin,Project Member'],
+            'role' => ['nullable', 'in:super admin,workspace member'],
         ];
     }
 }

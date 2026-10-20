@@ -2,10 +2,10 @@
 
 namespace App\Activities\Task;
 
-use App\Activitiess\Activity;
+use App\Activities\ActivityInterface;
 use App\Models\Task;
 
-final class TaskPriorityChanged implements Activity {
+final class TaskPriorityChanged implements ActivityInterface {
     public function __construct(
         private readonly string $oldPriority,
         private readonly string $newPriority,

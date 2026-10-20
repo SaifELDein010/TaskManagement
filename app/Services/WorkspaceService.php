@@ -53,8 +53,6 @@ class WorkspaceService {
         }
 
         return $this->workspaceRepository->restore(
-            $user,
-            $workspace
-        );
+            $user, $workspace);
     }
 }

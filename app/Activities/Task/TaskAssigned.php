@@ -2,10 +2,10 @@
 
 namespace App\Activities\Task;
 
-use App\Activitiess\Activity;
+use App\Activities\ActivityInterface;
 use App\Models\Task;
 
-final class TaskAssigned implements Activity {
+final class TaskAssigned implements ActivityInterface {
     public function __construct(
         private readonly ?int $oldAssigneeId,
         private readonly ?int $newAssigneeId,

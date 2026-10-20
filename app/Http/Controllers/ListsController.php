@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MoveListRequest;
-use App\Http\Requests\StoreListRequest;
-use App\Http\Requests\UpdateListRequest;
+use App\Http\Requests\List\MoveListRequest;
+use App\Http\Requests\List\StoreListRequest;
+use App\Http\Requests\List\UpdateListRequest;
 use App\Services\ListService;
 use Illuminate\Support\Facades\Auth;
 use InvalidArgumentException;
-use App\Http\Requests\UpdateListWorkflowRequest;
+use App\Http\Requests\List\UpdateListWorkflowRequest;
 use App\Services\ListWorkflowService;
 
 class ListsController extends Controller{

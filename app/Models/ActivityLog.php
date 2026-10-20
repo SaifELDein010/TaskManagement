@@ -33,4 +33,8 @@ class ActivityLog extends Model {
     public function actor(): BelongsTo {
         return $this->belongsTo(User::class, 'actor_id');
     }
+
+    public function subject(): MorphTo {
+        return $this->morphTo();
+    }
 }

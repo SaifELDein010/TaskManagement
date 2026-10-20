@@ -2,10 +2,10 @@
 
 namespace App\Activities\Comment;
 
-use App\Activitiess\Activity;
+use App\Activities\ActivityInterface;
 use App\Models\Comment;
 
-final class CommentCreated implements Activity {
+final class CommentCreated implements ActivityInterface {
     public function __construct(
         private readonly bool $isReply,
         private readonly ?int $parentCommentId,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Attachment;
 
 use App\Models\Attachment;
 use Illuminate\Support\Collection;

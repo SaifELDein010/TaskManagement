@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Repositories\Contracts;
+namespace App\Repositories\ActivityLog;
 
 use App\Models\ActivityLog;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+
 
 interface ActivityLogRepositoryInterface {
     public function create(array $data): ActivityLog;

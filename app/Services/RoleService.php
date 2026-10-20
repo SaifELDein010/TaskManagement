@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Role;
+namespace App\Services;
 
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\Permission\Models\Role;

@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\Workspace;
 use App\Repositories\WorkspaceMember\WorkspaceMemberRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 
 class PolicyService {
-    private const SUPER_ADMIN = 'super-admin';
+    private const SUPER_ADMIN = 'super admin';
     private const ADMIN = 'admin';
 
     public function __construct(
@@ -126,7 +127,7 @@ class PolicyService {
             return;
         }
 
-        if (!$this->members->find($workspaceId, (int) $user->id)) {
+        if (!$this->members->find($workspaceId, $user->id)) {
             throw new AuthorizationException(
                 'You are not a member of this workspace.'
             );

@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Role\CreateRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
 use App\Http\Requests\Role\SyncRolePermissionsRequest;
-use App\Services\Role\RoleService;
+use App\Services\RoleService;
 use Illuminate\Http\JsonResponse;
 use Spatie\Permission\Models\Role;
 use DomainException;
 
 class RoleController extends Controller {
-    public function __construct(private readonly RoleService $roleService) {}
+    public function __construct(private RoleService $roleService) {}
 
     public function index(): JsonResponse {
         $roles = $this->roleService->getRoles();

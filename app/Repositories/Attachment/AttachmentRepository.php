@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Attachment;
 
 use App\Models\Attachment;
 use Illuminate\Support\Collection;
@@ -25,5 +25,11 @@ class AttachmentRepository implements AttachmentRepositoryInterface {
 
     public function delete(Attachment $attachment): bool {
         return $attachment->delete();
+    }
+
+    public function findForAuthorization(int $id): ?Attachment {
+        return Attachment::query()
+            ->with(['task' => fn ($taskQuery) => $taskQuery->withTrashed()->with(['list' => fn ($listQuery) => $listQuery->withTrashed(),]),])
+            ->find($id);
     }
 }

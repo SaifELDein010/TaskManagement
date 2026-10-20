@@ -2,10 +2,10 @@
 
 namespace App\Activities\Task;
 
-use App\Activitiess\Activity;
+use App\Activities\ActivityInterface;
 use App\Models\Task;
 
-final class TaskDeleted implements Activity {
+final class TaskDeleted implements ActivityInterface {
     public function action(): string {
         return 'task.deleted';
     }

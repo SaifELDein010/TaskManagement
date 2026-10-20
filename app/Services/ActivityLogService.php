@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-use App\Activitiess\Activity;
+use App\Activities\ActivityInterface;
 use App\Models\ActivityLog;
-use App\Repositories\Contracts\ActivityLogRepositoryInterface;
+use App\Repositories\ActivityLog\ActivityLogRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Jobs\ExportActivityLogJob;
 
 class ActivityLogService{
-    public function __construct(private readonly ActivityLogRepositoryInterface $activityLogRepository,) {}
+    public function __construct(private ActivityLogRepositoryInterface $activityLogRepository,) {}
 
-    public function create(int $workspaceId, int $actorId, Activity $activity, int $subjectId,): ActivityLog {
+    public function create(int $workspaceId, int $actorId, ActivityInterface $activity, int $subjectId,): ActivityLog {
         return $this->activityLogRepository->create([
             'workspace_id' => $workspaceId,
             'actor_id' => $actorId,

@@ -3,7 +3,6 @@
 namespace App\Repositories\Comment;
 
 use App\Models\Comment;
-use App\Repositories\Comment\CommentRepositoryInterface;
 use Illuminate\Support\Collection;
 
 class CommentRepository implements CommentRepositoryInterface {
@@ -31,5 +30,11 @@ class CommentRepository implements CommentRepositoryInterface {
 
     public function delete(Comment $comment): bool {
         return $comment->delete();
+    }
+
+    public function findForAuthorization(int $id): ?Comment {
+        return Comment::query()
+            ->with(['task' => fn ($taskQuery) => $taskQuery->withTrashed()->with(['list' => fn ($listQuery) => $listQuery->withTrashed(),]),])
+            ->find($id);
     }
 }

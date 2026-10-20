@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Workspace;
 use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
-use App\Http\Requests\ExportActivityLogRequest;
+use App\Http\Requests\ActivityLog\ExportActivityLogRequest;
 
 class ActivityLogController extends Controller {
     public function __construct(private readonly ActivityLogService $activityLogService,) {}
@@ -15,7 +15,7 @@ class ActivityLogController extends Controller {
 
         $perPage = min(max($perPage, 1), 100);
 
-        $logs = $this->activityLogService->getWorkspaceLogs(workspaceId: $workspace->id, perPage: $perPage,);
+        $logs = $this->activityLogService->getWorkspaceLogs(workspaceId: (int)$workspace->id, perPage: $perPage,);
 
         return response()->json($logs);
     }

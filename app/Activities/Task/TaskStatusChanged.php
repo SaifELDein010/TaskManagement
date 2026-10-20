@@ -2,10 +2,10 @@
 
 namespace App\Activities\Task;
 
-use App\Activitiess\Activity;
+use App\Activities\ActivityInterface;
 use App\Models\Task;
 
-final class TaskStatusChanged implements Activity {
+final class TaskStatusChanged implements ActivityInterface {
     public function __construct(
         private readonly string $oldStatus,
         private readonly string $newStatus,

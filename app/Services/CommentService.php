@@ -11,6 +11,7 @@ use App\Services\ActivityLogService;
 use Illuminate\Support\Facades\DB;
 use App\Activities\Comment\CommentCreated;
 use App\Events\CommentCreated as CommentCreatedEvent;
+use Illuminate\Support\Facades\Log;
 
 class CommentService {
     public function __construct(
@@ -63,6 +64,11 @@ class CommentService {
                 subjectId: $comment->id,
             );
 
+            Log::info('DISPATCHING COMMENT EVENT', [
+                'comment_id' => $comment->id,
+                'task_id' => $task->id,
+                'actor_id' => $userId,
+            ]);
             CommentCreatedEvent::dispatch($comment, $task, $userId);
 
             return $comment;

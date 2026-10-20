@@ -2,10 +2,10 @@
 
 namespace App\Activities\Membership;
 
-use App\Activitiess\Activity;
+use App\Activities\ActivityInterface;
 use App\Models\User;
 
-final class MemberRoleChanged implements Activity {
+final class MemberRoleChanged implements ActivityInterface {
     public function __construct(
         private readonly string $oldRole,
         private readonly string $newRole,
